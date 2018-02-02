@@ -1,3 +1,5 @@
+import numpy as np
+
 from connectfour import ConnectFour
 
 
@@ -22,3 +24,13 @@ def test_possible_moves():
         c.place(0)
 
     assert c.possible_moves() == [1, 2, 3, 4, 5, 6]
+
+def test_winner():
+    c = ConnectFour()
+
+    assert not c.game_over()
+
+    c.board[0, 0:4] = np.ones((1, 4))
+
+    assert c.game_over()
+    assert c.winner() == 1
