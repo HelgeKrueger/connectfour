@@ -17,6 +17,11 @@ class ConnectFour:
             np.fliplr(np.diag(np.ones(4)))
         ]
 
+    def clone(self):
+        c = ConnectFour()
+        c.board = self.board.copy()
+        return c
+
     def print(self):
         print(self.board)
 
@@ -47,13 +52,25 @@ class ConnectFour:
 
         return
 
+class HumanAgent:
+    def move(self, connect_four):
+        move = int(input("Possible moves: {}    ".format(connect_four.possible_moves())))
+        connect_four.place(move)
+
+
 def main():
     c = ConnectFour()
+    human = HumanAgent()
 
     while not c.game_over():
-        move = random.choice(c.possible_moves())
-        c.place(move)
+        print('-' * 70)
         c.print()
+
+        if c.turn == 1:
+            human.move(c)
+        else:
+            move = random.choice(c.possible_moves())
+            c.place(move)
 
     print("Winner {}".format(c.winner()))
 
