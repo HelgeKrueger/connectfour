@@ -3,6 +3,9 @@ import random
 import numpy as np
 from scipy import signal
 
+from play import playout
+
+
 class ConnectFour:
     def __init__(self):
         self.rows = 6
@@ -20,10 +23,22 @@ class ConnectFour:
     def clone(self):
         c = ConnectFour()
         c.board = self.board.copy()
+        c.turn = self.turn
         return c
 
     def print(self):
-        print(self.board)
+        print('0 1 2 3 4 5 6')
+        for row in self.board:
+            line = ''
+            for entry in row:
+                if entry == 1:
+                    line = line + 'x '
+                elif entry == -1:
+                    line = line + 'o '
+                else:
+                    line = line + '  '
+            print(line)
+        print('0 1 2 3 4 5 6')
 
     def place(self, column):
         col = self.board[:, column]
@@ -56,29 +71,30 @@ class ConnectFour:
 
 class HumanAgent:
     def move(self, connect_four):
-        move = int(input("Possible moves: {}    ".format(connect_four.possible_moves())))
+        move = None
+        while move is None:
+            try:
+                move = int(input("Possible moves: {}    ".format(connect_four.possible_moves())))
+            except:
+                move = None
         connect_four.place(move)
 
 
 class Leaf:
-    def __init__(self, connect_four):
+    def __init__(self, connect_four, player):
         self.connect_four = connect_four
         self.possible_moves = connect_four.possible_moves()
         self.number = len(self.possible_moves)
 
-        if self.connect_four.game_over():
-            print('xxx')
-            return
+        self.player = player
 
         self.visits = np.ones(self.number)
         self.scores = [self.random_explore(connect_four.clone().place(self.possible_moves[i])) for i in range(self.number)]
         self.leafs = [None for _ in range(self.number)]
 
+
     def random_explore(self, connect_four):
-        while not connect_four.game_over():
-            move = random.choice(connect_four.possible_moves())
-            connect_four.place(move)
-        return connect_four.winner() or 0
+        return self.player * playout(connect_four)
 
     def best_move(self):
         scores = [float(self.scores[i])/self.visits[i] for i in range(self.number)]
@@ -95,9 +111,9 @@ class Leaf:
             next_board = self.connect_four.clone().place(self.possible_moves[index])
             if next_board.game_over():
                 new_visits = 1
-                new_scores = next_board.winner()
+                new_scores = self.player * (next_board.winner() or 0)
             else:
-                new_leaf = Leaf(next_board)
+                new_leaf = Leaf(next_board, self.player)
                 self.leafs[index] = new_leaf
                 new_visits = np.sum(new_leaf.visits)
                 new_scores = np.sum(new_leaf.scores)
@@ -109,17 +125,18 @@ class Leaf:
         return new_visits, new_scores
 
     def explore(self):
-        for t in range(1000):
+        for t in range(500):
             self.explore_step(t+1)
 
 
 class TreeSearhAgent:
-    def __init__(self):
+    def __init__(self, player):
         self.tree = []
+        self.player = player
 
     def move(self, connect_four):
         # move = random.choice(connect_four.possible_moves())
-        l = Leaf(connect_four)
+        l = Leaf(connect_four, self.player)
         l.explore()
 
         connect_four.place(l.best_move())
@@ -127,8 +144,9 @@ class TreeSearhAgent:
 
 def main():
     c = ConnectFour()
-    human = HumanAgent()
-    tree_search = TreeSearhAgent()
+    # human = HumanAgent()
+    human = TreeSearhAgent(-1)
+    tree_search = TreeSearhAgent(1)
 
     while not c.game_over():
         print('-' * 70)
