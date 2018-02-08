@@ -3,6 +3,7 @@ import random
 import numpy as np
 from scipy import signal
 
+from one_step_agent import OneStepAgent
 from play import playout
 
 
@@ -144,18 +145,17 @@ class TreeSearhAgent:
 
 def main():
     c = ConnectFour()
-    # human = HumanAgent()
-    human = TreeSearhAgent(-1)
-    tree_search = TreeSearhAgent(1)
+    negative_player = HumanAgent()
+    positive_player = OneStepAgent(1)
 
     while not c.game_over():
         print('-' * 70)
         c.print()
 
-        if c.turn == -1:
-            human.move(c)
+        if c.turn == 1:
+            positive_player.move(c)
         else:
-            tree_search.move(c)
+            negative_player.move(c)
 
     c.print()
     print("Winner {}".format(c.winner()))
