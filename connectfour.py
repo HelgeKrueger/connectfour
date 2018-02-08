@@ -70,16 +70,6 @@ class ConnectFour:
 
         return
 
-class HumanAgent:
-    def move(self, connect_four):
-        move = None
-        while move is None:
-            try:
-                move = int(input("Possible moves: {}    ".format(connect_four.possible_moves())))
-            except:
-                move = None
-        connect_four.place(move)
-
 
 class Leaf:
     def __init__(self, connect_four, player):
@@ -145,7 +135,7 @@ class TreeSearhAgent:
 
 def main():
     c = ConnectFour()
-    negative_player = HumanAgent()
+    negative_player = OneStepAgent(-1)
     positive_player = OneStepAgent(1)
 
     while not c.game_over():
