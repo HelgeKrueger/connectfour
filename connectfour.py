@@ -8,6 +8,7 @@ class ConnectFour:
         self.columns = 7
         self.board = np.zeros((self.rows, self.columns))
         self.turn = 1
+        self.history = []
 
         self.win_kernels = [
             np.ones((1, 4)),
@@ -20,6 +21,7 @@ class ConnectFour:
         c = ConnectFour()
         c.board = self.board.copy()
         c.turn = self.turn
+        c.history = self.history[:]
         return c
 
     def print(self):
@@ -42,6 +44,7 @@ class ConnectFour:
         self.board[self.rows - 1 - max, column] = self.turn
 
         self.turn = - self.turn
+        self.history.append(column)
 
         return self
 
