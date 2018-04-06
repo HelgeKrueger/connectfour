@@ -1,7 +1,6 @@
 from connectfour import ConnectFour
-from human_agent import HumanAgent
-from one_step_agent import OneStepAgent
-from tree_search_argent import TreeSearchAgent
+from agents.human_agent import HumanAgent
+from agents.tree_search_argent import TreeSearchAgent
 
 # HumanAgent -> Mensch
 # OneStepAgent -> Monte Carlo Function

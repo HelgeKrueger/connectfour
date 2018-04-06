@@ -1,9 +1,10 @@
 import numpy as np
 
+from agents.agent import Agent
 from play import average_playout
 
 
-class OneStepAgent:
+class OneStepAgent(Agent):
     def __init__(self, player, number=100):
         self.player = player
         self.number = number

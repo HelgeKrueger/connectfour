@@ -1,5 +1,6 @@
 import numpy as np
 
+from agents.agent import Agent
 from play import playout
 
 
@@ -59,7 +60,7 @@ class Leaf:
             return
 
 
-class TreeSearchAgent:
+class TreeSearchAgent(Agent):
     def __init__(self, player):
         self.player = player
         self.history = []

@@ -1,4 +1,7 @@
-class HumanAgent:
+from agents.agent import Agent
+
+
+class HumanAgent(Agent):
     def move(self, connect_four):
         move = None
         possible_moves = connect_four.possible_moves()
