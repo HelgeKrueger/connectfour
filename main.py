@@ -1,13 +1,14 @@
-from multiprocessing import Process
-
 from connectfour import ConnectFour
+from human_agent import HumanAgent
+from one_step_agent import OneStepAgent
 from tree_search_argent import TreeSearchAgent
 
+# HumanAgent -> Mensch
+# OneStepAgent -> Monte Carlo Function
+# TreeSearchAgent -> MCTS
 
-def evaluate():
+def evaluate(positive_player=TreeSearchAgent(1), negative_player=TreeSearchAgent(-1)):
     c = ConnectFour()
-    positive_player = TreeSearchAgent(1) # OneStepAgent(1,  number=100)
-    negative_player = TreeSearchAgent(-1)
 
     while not c.game_over():
         if c.turn == 1:
@@ -19,15 +20,5 @@ def evaluate():
 
     print("Winner {}".format(c.winner()))
 
-def main():
-    processes = []
-    for _ in range(1):
-        p = Process(target=evaluate)
-        p.start()
-        processes.append(p)
-
-    for p in processes:
-        p.join()
-
 if __name__ == '__main__':
-    main()
+    evaluate(positive_player=HumanAgent())

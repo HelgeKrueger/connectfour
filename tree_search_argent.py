@@ -66,7 +66,6 @@ class TreeSearchAgent:
         self.leaf = None
 
     def move(self, connect_four):
-        # move = random.choice(connect_four.possible_moves())
         if self.leaf:
             new_moves = connect_four.history[len(self.history):]
             for move in new_moves:
