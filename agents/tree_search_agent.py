@@ -59,6 +59,16 @@ class Leaf:
         except:
             return
 
+    def visualize(self, graph, root='root'):
+        for k in range(self.number):
+            leaf = self.leafs[k]
+            if leaf is not None:
+                name = root + str(k)
+                graph.node(name, '{}: {} | {}'.format(k, int(self.visits[k]), self.scores[k]))
+                graph.edge(root, name)
+                leaf.visualize(graph, root=name)
+
+
 
 class TreeSearchAgent(Agent):
     def __init__(self, player):
@@ -80,3 +90,12 @@ class TreeSearchAgent(Agent):
         self.leaf.explore()
 
         connect_four.place(self.leaf.best_move())
+
+    def visualize(self):
+        from graphviz import Digraph
+        graph = Digraph()
+        graph.node('root', 'root')
+
+        self.leaf.visualize(graph, root='root')
+
+        return graph
