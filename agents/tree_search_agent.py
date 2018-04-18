@@ -48,8 +48,8 @@ class Leaf:
         self.scores[index] = self.scores[index] + new_scores
         return new_visits, new_scores
 
-    def explore(self):
-        for t in range(100):
+    def explore(self, depth):
+        for t in range(depth):
             self.explore_step(t+1)
 
     def get_leaf_for_move(self, move):
@@ -71,10 +71,11 @@ class Leaf:
 
 
 class TreeSearchAgent(Agent):
-    def __init__(self, player):
+    def __init__(self, player, depth=100):
         self.player = player
         self.history = []
         self.leaf = None
+        self.depth = depth
 
     def move(self, connect_four):
         if self.leaf:
@@ -87,7 +88,7 @@ class TreeSearchAgent(Agent):
         else:
             self.leaf = Leaf(connect_four, self.player)
 
-        self.leaf.explore()
+        self.leaf.explore(self.depth)
 
         connect_four.place(self.leaf.best_move())
 
